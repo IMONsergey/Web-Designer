@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+plugin/dist/
+.build/
+*.tgz
+
+# Environment and local config
+.env
+.env.local
+.env.*
+.envrc
+*.log
+
+# Local runtime state
+.figma-pipeline/
+registry/
+
+# Local editor state
+.idea/
+.vscode/
+.DS_Store
+.playwright-mcp/
+.claude/worktrees/
+
+# Local one-off scripts (not part of the package)
+case-study-build.js
+scratch/
+.scratch/

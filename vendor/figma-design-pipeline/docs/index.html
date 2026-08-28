@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SPFR Figma Design Pipeline</title>
+    <meta name="description" content="AI design assistant for Figma. Analyze websites, create design systems, design pages, sync tokens, and generate code from Claude Code, Codex, and Gemini CLI.">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <p class="eyebrow">AI Design Assistant</p>
+        <h1>SPFR Figma Design Pipeline</h1>
+        <p class="lede">Analyze websites, create design systems, design pages and dashboards, sync tokens, and generate production code from your terminal. Works with Claude Code, Codex CLI, and Gemini CLI.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/spfr/figma-design-pipeline">GitHub</a>
+          <a class="button" href="https://www.npmjs.com/package/@spicefactory/figma-design-pipeline">npm</a>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <h2>One-Line Install</h2>
+          <pre><code>npx -y -p @spicefactory/figma-design-pipeline spfr-figma-design-pipeline-install --client all</code></pre>
+          <p>Copies stable local assets into <code>~/.figma-design-pipeline/</code>, registers the MCP server, and installs the design assistant skill for Claude Code, Gemini CLI, and Codex CLI.</p>
+        </article>
+
+        <article class="card">
+          <h2>30-60x Faster Writes</h2>
+          <p>The included Figma plugin executes batch actions via WebSocket — 50 operations in ~200ms vs ~50 seconds with individual calls. 43 action types including text creation, variables, gradients, responsive layouts, and pages.</p>
+        </article>
+
+        <article class="card">
+          <h2>Design Intelligence</h2>
+          <p>Structured inspection, auditing, token extraction with hue clustering, design constants (type scale, elevation, spacing), and 4-format token export (Tailwind, CSS, JSON, Style Dictionary).</p>
+        </article>
+      </section>
+
+      <section class="split">
+        <article class="panel">
+          <h2>What You Can Do</h2>
+          <ul>
+            <li>"Look at this website and create a design system"</li>
+            <li>"Design me an analytics dashboard"</li>
+            <li>"Sync design tokens to our Tailwind config"</li>
+            <li>"Generate React components from this Figma page"</li>
+          </ul>
+        </article>
+
+        <article class="panel">
+          <h2>How It Works</h2>
+          <ul>
+            <li>Official Figma MCP handles Figma reads/writes (OAuth)</li>
+            <li>This MCP server provides design intelligence (analysis, planning, codegen)</li>
+            <li>Browser tools capture and analyze websites</li>
+            <li>The design assistant skill orchestrates everything</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="panel">
+        <h2>Quick Start</h2>
+        <ol>
+          <li>Have Node 24 LTS or newer (<code>node --version</code>)</li>
+          <li>Install: <code>npx -y -p @spicefactory/figma-design-pipeline spfr-figma-design-pipeline-install --client all</code></li>
+          <li>Import <code>~/.figma-design-pipeline/plugin/manifest.json</code> into Figma Desktop</li>
+          <li>Open Claude Code, Codex CLI, or Gemini CLI</li>
+          <li>Start designing: "Create a design system for my project"</li>
+        </ol>
+        <p>For full instructions see <a href="https://github.com/spfr/figma-design-pipeline/blob/main/INSTALL.md">INSTALL.md</a> and <a href="https://github.com/spfr/figma-design-pipeline/blob/main/USAGE.md">USAGE.md</a>.</p>
+      </section>
+    </main>
+  </body>
+</html>

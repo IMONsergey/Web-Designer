@@ -1,0 +1,80 @@
+{
+  "name": "@spicefactory/figma-design-pipeline",
+  "version": "0.8.0",
+  "description": "AI design assistant MCP server: inspect Figma designs, plan changes, extract tokens, sync design systems, and generate code. Includes a high-performance Figma plugin for 30-60x faster writes than use_figma.",
+  "keywords": [
+    "figma",
+    "mcp",
+    "model-context-protocol",
+    "design-assistant",
+    "design-to-code",
+    "design-system",
+    "token-sync",
+    "claude",
+    "codex",
+    "gemini"
+  ],
+  "homepage": "https://spfr.github.io/figma-design-pipeline/",
+  "bugs": {
+    "url": "https://github.com/spfr/figma-design-pipeline/issues"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spfr/figma-design-pipeline.git"
+  },
+  "author": "SPFR",
+  "publishConfig": {
+    "access": "public"
+  },
+  "overrides": {
+    "ajv": "^8.18.0"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "directories": {
+    "bin": "bin"
+  },
+  "files": [
+    "bin",
+    "dist/index.js",
+    "plugin/dist",
+    "scripts/build-server.mjs",
+    "scripts/build-plugin.mjs",
+    "scripts/install.mjs",
+    "skill",
+    "CHANGELOG.md",
+    "INSTALL.md",
+    "PUBLISHING.md",
+    "README.md",
+    "USAGE.md"
+  ],
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "npm run build:server && npm run build:plugin",
+    "build:server": "node scripts/build-server.mjs",
+    "build:plugin": "node scripts/build-plugin.mjs",
+    "check": "tsc --noEmit",
+    "test": "vitest run --passWithNoTests",
+    "install:clients": "node scripts/install.mjs",
+    "prepack": "npm run build",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "dotenv": "^17.4.2",
+    "ws": "^8.20.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@figma/plugin-typings": "^1.125.0",
+    "@types/node": "^24.12.4",
+    "@types/ws": "^8.18.1",
+    "esbuild": "^0.28.0",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.6"
+  }
+}
