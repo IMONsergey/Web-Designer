@@ -1,217 +1,282 @@
 ---
 name: imon-web-designer
-description: Agent-native web design orchestration skill combining design taste, Figma inspection and mutation, design-token sync, design-to-code, motion, responsive implementation, and visual QA. Use for new sites, redesigns, Figma-to-code, image-to-code, and Figma-first design workflows.
+description: Agent-native web design orchestration combining visual direction, Figma inspection/mutation, production frontend engineering, browser/performance verification, deterministic design QA, branded diagrams, and optional procedural Three.js reconstruction. Use for new sites, redesigns, Figma-to-code, image-to-code, high-end marketing surfaces, and Figma-first workflows.
 ---
 
-# Web Designer
+# I’MON Web Designer
 
-This is the primary orchestration skill for this repository.
+This is the primary router for the Web-Designer stack. It keeps specialist capabilities separate so the agent gets **more judgment without loading everything at once**.
 
-It does **not** replace the specialist skills in `skills/`. It routes work between them and the vendored `figma-design-pipeline` so that visual direction, Figma execution, implementation, and QA stay consistent.
+## Operating model
 
-## Core principle
+Use six layers. Do not collapse them into one giant prompt.
 
-Separate **judgment** from **execution**:
+1. **Direction** — Taste skills decide what the interface should feel like.
+2. **Design artifact** — Figma pipeline inspects, plans, mutates, exports, and syncs tokens.
+3. **Engineering** — production skills enforce component, source, browser, and performance discipline.
+4. **Special artifacts** — Diagram Design and optional img2threejs handle work ordinary frontend heuristics should not fake.
+5. **Implementation** — code reproduces the approved visual system responsively and accessibly.
+6. **Verification** — browser evidence + Impeccable deterministic QA + visual comparison decide whether the work is finished.
 
-- Taste/design skills decide *what the interface should feel like and why*.
-- Figma tools inspect, plan, mutate, and export the design artifact.
-- Code tools implement the approved system without flattening it into generic UI.
-- QA compares the result back to the source/reference instead of trusting the first render.
+**Judgment and execution are different jobs.** Taste does not blindly write nodes. Figma tooling does not invent art direction. A linter does not choose a brand. A successful API call is not visual QA.
 
-Do not let the Figma pipeline choose the art direction by itself. Do not let a taste skill blindly write Figma nodes without using the Figma execution layer.
+---
 
-## 1. Classify the task
+## 1. Route the task before loading skills
 
-Choose one primary route before doing work.
+Load only the narrowest specialists required.
 
-| Route | Use when | Specialist skill |
-|---|---|---|
-| Greenfield web design | New landing, portfolio, campaign, brand site | `skills/taste-skill/SKILL.md` |
-| Codex-heavy experimental web | Stronger anti-template direction, motion, layout variance | `skills/gpt-tasteskill/SKILL.md` |
-| Existing-site redesign | A codebase/site already exists | `skills/redesign-skill/SKILL.md` |
-| Reference/image → implementation | Screenshot, visual reference, or generated comp is the source | `skills/image-to-code-skill/SKILL.md` |
-| Calm premium UI | Restrained, expensive, low-noise direction | `skills/soft-skill/SKILL.md` |
-| Minimal/editorial product UI | Tight hierarchy and restrained product language | `skills/minimalist-skill/SKILL.md` |
-| Brutalist/industrial direction | Explicit hard, mechanical, typographic direction | `skills/brutalist-skill/SKILL.md` |
-| Brand exploration | Identity, palette, type, logo-system work | `skills/brandkit/SKILL.md` |
-| Figma-first workflow | Any task where Figma is a source or destination | this skill + Figma pipeline |
+| Task | Primary specialist |
+|---|---|
+| New marketing / landing / portfolio site | `skills/taste-skill/SKILL.md` |
+| Codex-heavy experimental layout/motion | `skills/gpt-tasteskill/SKILL.md` |
+| Existing site redesign | `skills/redesign-skill/SKILL.md` |
+| Screenshot / visual reference → code | `skills/image-to-code-skill/SKILL.md` |
+| Calm premium direction | `skills/soft-skill/SKILL.md` |
+| Minimal/editorial product UI | `skills/minimalist-skill/SKILL.md` |
+| Brutalist / industrial direction | `skills/brutalist-skill/SKILL.md` |
+| Brand exploration | `skills/brandkit/SKILL.md` |
+| Figma is source or destination | Figma pipeline + this skill |
+| Production frontend architecture | `frontend-ui-engineering` |
+| Framework/library decision | `source-driven-development` |
+| Runtime/browser verification | `browser-testing-with-devtools` |
+| Performance concern / motion / WebGL | `performance-optimization` |
+| Final code-health gate | `code-review-and-quality` |
+| Process / architecture / roadmap / chart / diagram | `diagram-design` |
+| Reference object → procedural Three.js | `img2threejs` **only if installed** |
+| Final anti-slop / design-system QA | `impeccable` **when enabled in the target project** |
 
-Load only the specialist skill(s) relevant to the route. Do not concatenate every style skill into one prompt.
+Do not load all visual style skills. Do not load all engineering skills for a trivial static edit. Progressive disclosure is mandatory.
+
+---
 
 ## 2. Establish the source of truth
 
-Before creating anything, identify the hierarchy of evidence:
+Evidence priority:
 
 1. User-provided content and explicit constraints.
-2. Existing Figma file / production UI / codebase.
-3. Supplied references and screenshots.
-4. Existing brand assets and design tokens.
-5. Specialist skill heuristics.
-6. Your own invention, only where the previous layers are silent.
+2. Approved Figma / production UI / existing codebase.
+3. Supplied screenshots, references, videos, and assets.
+4. Existing brand system and tokens.
+5. Specialist-skill guidance.
+6. Invention only where all previous layers are silent.
 
-Never replace known content with invented copy merely to make a layout easier. Never erase a brand system just because a default AI aesthetic is more convenient.
+Never invent copy, metrics, products, navigation, or claims to make a layout convenient. Never replace an existing brand merely because an AI-default aesthetic is easier.
 
-For redesigns, audit before proposing. For Figma-to-code, inspect before generating. For image-to-code, analyze geometry, hierarchy, type, spacing, color, imagery, and responsive implications before coding.
+For redesigns: audit first. For Figma-to-code: inspect first. For screenshot-to-code: analyze hierarchy, geometry, type, spacing, imagery, states, and responsive implications before coding.
 
-## 3. Produce a Design Read
+---
 
-Before implementation, state internally or in the work log:
+## 3. Design direction
 
-`Page/product type → audience → visual language → interaction language → density → key constraints.`
+Before implementation, derive a concise Design Read:
 
-Then load the relevant taste skill and derive a direction. Avoid generic AI defaults: random violet/blue gradients, centered dark SaaS hero, equal three-card grids, glass everywhere, arbitrary glow, and motion with no narrative purpose.
+`surface → audience → visual language → interaction language → density → constraints → references to preserve/avoid`
 
-The specialist taste skill remains authoritative for detailed visual heuristics. This orchestrator is authoritative for sequencing and tool routing.
+Then load the relevant Taste specialist.
 
-## 4. Figma routing rules
+Explicitly reject generic AI defaults unless the brief asks for them: purple/blue glow, centered dark SaaS hero, three equal feature cards, glass everywhere, random pills, excessive rounded rectangles, arbitrary gradients, motion without narrative purpose, and interchangeable stock copy.
 
-When a Figma file is involved, use the vendored `figma-design-pipeline` skill and tools.
+When the target project has Impeccable enabled, initialize its project context **after** direction is understood. `PRODUCT.md` / `DESIGN.md` should encode the approved direction, not replace it.
 
-### Mandatory routing
+---
 
-| Operation | Preferred tool |
+## 4. Figma execution layer
+
+Use the vendored `figma-design-pipeline` whenever Figma participates.
+
+### Routing
+
+| Operation | Tool |
 |---|---|
-| Check write bridge | `figma_plugin_status` |
-| Inspect tree / find nodes | `figma_get_tree`, `figma_find_nodes` |
-| Audit structure/quality | `figma_audit` |
-| Read tokens/styles/components | `figma_extract_tokens`, `figma_get_styles`, `figma_get_components` |
-| Plan naming/layout/grouping/components | `figma_plan_*` |
-| **Any Figma mutation** | **`figma_execute`** |
-| Screenshot / visual confirmation | official Figma MCP screenshot tool |
-| Create a new Figma file | official Figma MCP file-creation tool |
-| Map design to code | `figma_map_components` |
-| Generate page/schema | `figma_generate_page`, `figma_generate_schema` |
-| Export/sync tokens | `figma_export_tokens`, `figma_diff_tokens` |
+| Check high-speed bridge | `figma_plugin_status` |
+| Tree / node inspection | `figma_get_tree`, `figma_find_nodes` |
+| Structural audit | `figma_audit` |
+| Tokens / styles / components | `figma_extract_tokens`, `figma_get_styles`, `figma_get_components` |
+| Naming/layout/grouping/component plans | `figma_plan_*` |
+| **Any mutation** | **`figma_execute`** |
+| Screenshot | official Figma screenshot tool |
+| New file | official Figma file-creation tool |
+| Figma → code mapping | `figma_map_components` |
+| Page/schema generation | `figma_generate_page`, `figma_generate_schema` |
+| Token export/diff | `figma_export_tokens`, `figma_diff_tokens` |
 
-At the start of a Figma write task, call `figma_plugin_status`.
+For write tasks, call `figma_plugin_status` first. Even if disconnected, call `figma_execute`; use its fallback rather than improvising ad-hoc writes.
 
-If the plugin bridge is disconnected, still call `figma_execute` first. The pipeline can return fallback JavaScript for the official Figma MCP. Do **not** switch to ad-hoc direct write calls just because the bridge is unavailable.
+### Figma sequence
 
-Treat `vendor/figma-design-pipeline/` as upstream code. Do not patch it for project-specific behavior unless the task explicitly requires maintaining a fork. Integration changes belong outside `vendor/`.
+**Inspect → Audit → Direction → Plan → Execute → Screenshot → Re-inspect.**
 
-## 5. Figma-first workflow
+After meaningful batches verify clipping, font substitution, broken instances, constraints, auto-layout, layer drift, duplicate styles, and content fidelity.
 
-Use this sequence when Figma is the design source or destination.
+Treat `vendor/figma-design-pipeline/` as pinned upstream. I’MON-specific behavior belongs outside `vendor/`.
 
-### A. Inspect
-- Read file/page/frame hierarchy.
-- Identify components, variants, styles, variables, auto-layout, constraints, and obvious one-off duplication.
-- Extract tokens where useful.
-- Capture screenshots of the relevant frames.
+---
 
-### B. Audit
-Check:
-- hierarchy and spacing rhythm;
-- type scale and line lengths;
-- color/token consistency;
-- component reuse;
-- auto-layout and responsive constraints;
-- naming and layer hygiene;
-- accessibility risks;
-- desktop/mobile relationship;
-- visual defects introduced by generation.
+## 5. Production engineering layer
 
-### C. Direction
-Load the relevant taste skill and decide what to preserve, what to change, and what the interface should become. Do not mutate Figma while the direction is still ambiguous.
+Visual quality does not excuse fragile code. Pull the vendored Addy skills only when their gate is relevant.
 
-### D. Plan
-Use pipeline planning tools for grouping/layout/components/naming when the task is large enough to benefit from explicit batches.
+### `frontend-ui-engineering`
+Use for component architecture, responsive behavior, design-system integration, state boundaries, semantics, keyboard/focus behavior, and accessibility.
 
-### E. Execute
-Use `figma_execute` for writes. Prefer coherent batches over hundreds of tiny mutations. Preserve existing reusable components and variables unless there is a clear reason to replace them.
+### `source-driven-development`
+Use before introducing or changing framework/library behavior. Verify against authoritative documentation rather than coding from model memory.
 
-### F. Verify in Figma
-After meaningful write batches:
-- re-read the changed subtree;
-- take a screenshot;
-- check clipping, overflow, missing fonts, broken instances, wrong constraints, duplicate styles, and accidental position drift.
+### `browser-testing-with-devtools`
+Use after implementation and for bugs. Inspect real DOM/layout, console, network, runtime behavior, and screenshots. Do not infer runtime correctness from source code alone.
 
-A successful API response is not visual QA.
+### `performance-optimization`
+Use for animation-heavy pages, large assets, client rendering, Core Web Vitals, WebGL, canvas, bundles, and regressions. Measure before optimizing.
 
-## 6. Code implementation workflow
+### `code-review-and-quality`
+Use as the final engineering review on non-trivial changes. Design approval is not permission to ship poor maintainability.
 
-When implementing from Figma/reference:
+For ordinary frontend work the engineering order is:
 
-1. Inspect the existing repo and `package.json` before choosing libraries.
-2. Extract or infer reusable tokens instead of scattering magic values.
-3. Map Figma components to existing code components before generating new ones.
-4. Preserve semantic HTML, accessibility, keyboard states, focus, and reduced-motion behavior.
-5. Reproduce the visual hierarchy first; add motion after layout is stable.
-6. Use responsive behavior that reflects design intent, not a mechanical desktop shrink.
-7. Do not ship placeholder sections, lorem ipsum, fake metrics, or invented claims unless explicitly requested.
-8. Keep performance in the design definition: avoid unnecessary client rendering, giant uncompressed assets, uncontrolled WebGL, scroll handlers that rerender the tree, and animation that blocks interaction.
+`existing repo inspection → implementation → browser evidence → performance gate when relevant → code review`
+
+---
+
+## 6. Implementation rules
+
+1. Inspect the target repo and dependency manifest before choosing libraries.
+2. Reuse tokens/components before creating new ones.
+3. Preserve semantic HTML, focus states, keyboard navigation, reduced motion, and readable responsive order.
+4. Match visual hierarchy before adding animation.
+5. Responsive design must preserve intent, not mechanically shrink desktop.
+6. Never ship placeholders, fake data, lorem ipsum, invented claims, or TODO sections as finished work.
+7. Keep performance inside the design definition: avoid uncontrolled client rendering, giant assets, scroll-state rerenders, pointless WebGL, and blocking animation.
+8. Prefer a small coherent component system over premature abstraction.
 
 ### Motion
-Motion must explain hierarchy, continuity, state, or brand character. It must not exist only because the library is available.
+Motion must explain hierarchy, continuity, state, or brand character. Prefer transform/opacity. Use GSAP, canvas, shaders, or Three.js only when the intended experience benefits materially. Respect reduced-motion preferences.
 
-Prefer transform/opacity-based motion. Use GSAP/Three.js only when they materially improve the intended experience. Provide reduced-motion behavior for non-essential animation.
+---
 
-### Three.js / WebGL
-Use for scenes that genuinely benefit from depth, procedural graphics, spatial interaction, shaders, or hero-level art direction. Do not turn ordinary card UI into WebGL.
+## 7. Diagram / visual-content route
 
-Keep a non-WebGL fallback when the visual is important to comprehension or conversion.
+Use `diagram-design` when a section communicates better as a visual system than prose/cards: architecture, process, flow, sequence, timeline, Gantt, journey, quadrant, chart, Sankey, schema, roadmap-like structures, etc.
 
-## 7. Design-system loop
+Do **not** use it for decorative pseudo-diagrams or simple lists.
 
-For projects with an existing design system:
+### Brand bridge
+If Figma/design tokens exist:
 
-`Figma variables/styles → normalized tokens → code tokens → component implementation → diff back against Figma.`
+`Figma tokens → semantic roles → diagram-design style/profile → generated HTML/SVG/PNG`
 
-Use `figma_extract_tokens`, `figma_export_tokens`, and `figma_diff_tokens` when available.
+Do not silently use Diagram Design's default skin inside an established brand. Use the project's typography/color hierarchy and maintain contrast.
 
-Do not silently create two independent token systems. If Figma and code disagree, identify the authority for that project and reconcile deliberately.
+For embedding into a site, preserve the diagram's semantic hierarchy and accessibility. Prefer SVG/HTML when interaction/responsiveness matters; raster exports are for static delivery.
 
-## 8. Visual QA gate
+---
 
-Before calling a design task complete, verify all relevant states.
+## 8. Optional procedural 3D route
+
+`img2threejs` is an **extra**, not the default Three.js workflow. It is installed only with `--with-3d` / `npm run setup:3d`.
+
+Use it when the brief contains a concrete reference object/character that should become a procedural, animation-ready Three.js model. Follow its staged gates and local state; do not one-shot approximate geometry and call it matched.
+
+Do **not** use img2threejs for generic abstract backgrounds, simple particles, globes, shader fields, or ordinary product cards. Those should use direct Three.js/WebGL implementation when justified.
+
+If `img2threejs` is not installed, do not pretend its pipeline is available. Either use a simpler justified Three.js route or install the extra.
+
+---
+
+## 9. Deterministic design QA with Impeccable
+
+Impeccable is deliberately **not vendored** because it is a large independently updated tool with provider hooks and browser/live infrastructure. The repository pins the supported integration to `impeccable@3.6.1` through `scripts/enable-project.mjs`.
+
+Enable it per target project so hooks and project context live where the site actually lives.
+
+Use it as a verification layer:
+
+- `audit` — deterministic/technical issues;
+- `critique` — hierarchy/clarity/design review;
+- `polish` — final design-system alignment;
+- `harden` — overflow, edge states, resilience;
+- `optimize` — performance cleanup;
+- `adapt` — device-specific quality;
+- `animate`, `typeset`, `layout` only when those dimensions need intervention.
+
+**Conflict rule:** approved user/Figma/brand direction beats a generic detector preference. A finding is evidence to inspect, not permission to overwrite intentional design.
+
+Recommended completion loop:
+
+`render → browser inspect → visual compare → Impeccable audit/critique → targeted fix → re-render → polish/harden → final compare`
+
+---
+
+## 10. Design-system loop
+
+For an existing system:
+
+`Figma variables/styles → normalized tokens → code tokens → components → rendered result → token/visual diff back to Figma`
+
+Do not maintain two silent token systems. If Figma and code disagree, determine authority explicitly and reconcile.
+
+The same tokens should inform diagrams and auxiliary visual artifacts where practical.
+
+---
+
+## 11. Visual QA gate
 
 ### Desktop
 - composition and alignment;
-- hierarchy and type rendering;
-- section transitions;
-- image crop and focal points;
-- hover/focus states;
+- type rendering and hierarchy;
+- spacing rhythm and section transitions;
+- image crops/focal points;
+- hover/focus/active states;
 - motion timing;
-- no accidental generic component styling.
+- no generic component regressions.
 
 ### Mobile
-- no clipped text or controls;
-- no desktop-only absolute positioning leaks;
-- touch targets remain usable;
-- content order still makes sense;
-- text measure is sane;
-- interactive/motion effects degrade safely;
-- `100dvh`/safe-area behavior is correct where applicable.
+- no clipping/overflow;
+- no leaked desktop absolute positioning;
+- usable touch targets;
+- sensible content order;
+- sane text measure;
+- safe animation degradation;
+- `100dvh` / safe-area behavior where relevant.
 
-### Figma fidelity
-If implementing an approved Figma design, compare render to source. Do not declare completion from DOM inspection alone.
+### Figma/reference fidelity
+Compare final render against the approved source. DOM correctness alone is insufficient.
 
-### Content fidelity
-Ensure the final interface contains the provided content, spelling, data, and asset choices. Design polish does not justify silently rewriting facts.
+### Performance
+For motion/WebGL/large-media work, collect actual runtime evidence. Do not label something "optimized" because the code looks reasonable.
 
-## 9. Completion criteria
+### Content
+Verify exact provided content, spelling, data, links, assets, and states.
 
-A task is complete only when the requested artifact is actually usable:
+---
 
-- direction is coherent and context-specific;
-- Figma writes (if any) used the correct mutation path;
-- design tokens/components are not needlessly duplicated;
-- code runs and required dependencies are declared;
-- desktop and mobile are both addressed when applicable;
-- visual QA has been performed after the final meaningful change;
+## 12. Completion criteria
+
+A task is finished only when:
+
+- direction is context-specific and coherent;
+- correct specialist skills were used without context dumping;
+- Figma writes used the correct execution path;
+- tokens/components are not needlessly duplicated;
+- code runs with declared dependencies;
+- desktop/mobile are addressed when applicable;
+- runtime/browser QA happened after the final meaningful change;
+- performance evidence exists when performance is material;
+- Impeccable findings are resolved or deliberately documented when enabled;
 - no placeholder implementation remains;
-- no unrelated vendor modifications are mixed into the change.
+- vendor snapshots remain unmodified unless intentionally updating upstream.
 
-## 10. Repository map
+---
 
-- `skills/web-designer/` — primary orchestration skill.
-- `skills/taste-skill/` — default anti-slop visual intelligence.
-- `skills/gpt-tasteskill/` — stricter GPT/Codex visual direction.
-- `skills/redesign-skill/` — audit-first redesign workflow.
-- `skills/image-to-code-skill/` — reference/image-to-code workflow.
-- `skills/*` — other specialist design modes.
-- `vendor/figma-design-pipeline/` — pinned upstream MCP server + Figma plugin + upstream skill.
-- `scripts/install-web-designer.mjs` — local setup for pipeline + this skill.
-- `AGENTS.md` — repository-level agent instructions.
+## Repository map
 
-When in doubt: **taste decides, Figma pipeline executes, QA verifies.**
+- `skills/web-designer/` — orchestration layer.
+- `skills/*` — Taste and visual-direction specialists from Taste Skill.
+- `vendor/figma-design-pipeline/` — Figma MCP/server/plugin execution layer.
+- `vendor/agent-skills/` — pinned engineering/verification workflows.
+- `vendor/diagram-design/` — pinned branded diagram engine/skill.
+- `scripts/install-web-designer.mjs` — installs core skills + Figma pipeline; optional `--with-3d`.
+- `scripts/enable-project.mjs` — enables pinned Impeccable project QA/hooks.
+- `AGENTS.md` — repository operating rules.
+
+When in doubt: **Taste directs → Figma executes → engineering makes it real → browser/Impeccable prove it → specialist artifact engines handle the unusual parts.**
