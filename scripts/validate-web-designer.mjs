@@ -18,6 +18,7 @@ const required = [
   'vendor/figma-design-pipeline/skill/SKILL.md',
   'vendor/agent-skills/LICENSE',
   'vendor/agent-skills/UPSTREAM.md',
+  'vendor/agent-skills/references/accessibility-checklist.md',
   'vendor/agent-skills/skills/frontend-ui-engineering/SKILL.md',
   'vendor/agent-skills/skills/browser-testing-with-devtools/SKILL.md',
   'vendor/agent-skills/skills/performance-optimization/SKILL.md',
@@ -107,6 +108,10 @@ for (const marker of [
   'browser-testing-with-devtools',
   'diagram-design',
   '--with-3d',
+  'preparePortableEngineeringSkill',
+  "replaceAll('../../references/', 'references/')",
+  "cpSync(sharedReferences, join(destination, 'references')",
+  "'.imon-web-designer', 'engineering'",
 ]) {
   if (!installer.includes(marker)) failures.push(`Installer is missing marker: ${marker}`);
 }
@@ -127,7 +132,7 @@ if (failures.length) {
 console.log('Web-Designer design stack v2 validation passed.');
 console.log('Primary skill: imon-web-designer');
 console.log(`Figma pipeline: ${figmaPackage.version} / Node ${figmaPackage.engines.node}`);
-console.log('Engineering layer: addyosmani/agent-skills @ f63ec56');
+console.log('Engineering layer: addyosmani/agent-skills @ f63ec56 (portable selected skills)');
 console.log('Diagram layer: cathrynlavery/diagram-design @ ac490fd');
 console.log('Project QA: impeccable@3.6.1');
 console.log('Optional 3D: img2threejs @ 441af85');
