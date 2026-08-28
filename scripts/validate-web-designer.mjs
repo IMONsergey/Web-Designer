@@ -36,8 +36,11 @@ for (const marker of ['name: imon-web-designer', 'figma_execute', 'figma_plugin_
 }
 
 const registry = readFileSync(join(root, 'skill.sh'), 'utf8');
-if (!registry.includes('[web-designer]="skills/web-designer/SKILL.md"')) {
+if (!registry.includes('web-designer) echo "skills/web-designer/SKILL.md"')) {
   failures.push('skill.sh does not register web-designer.');
+}
+if (registry.includes('declare -A')) {
+  failures.push('skill.sh must remain compatible with macOS Bash 3.2 and cannot use declare -A.');
 }
 
 const vendorPackage = JSON.parse(readFileSync(join(root, 'vendor', 'figma-design-pipeline', 'package.json'), 'utf8'));
@@ -63,5 +66,5 @@ if (failures.length) {
 }
 
 console.log('Web-Designer integration validation passed.');
-console.log(`Primary skill: imon-web-designer`);
+console.log('Primary skill: imon-web-designer');
 console.log(`Figma pipeline: ${vendorPackage.version} / Node ${vendorPackage.engines.node}`);
