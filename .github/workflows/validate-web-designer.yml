@@ -18,6 +18,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - name: Syntax-check integration scripts
+        run: |
+          node --check scripts/install-web-designer.mjs
+          node --check scripts/validate-web-designer.mjs
       - name: Validate repository integration
         run: npm run validate
 
