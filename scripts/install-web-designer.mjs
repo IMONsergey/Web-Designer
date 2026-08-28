@@ -1,6 +1,15 @@
 #!/usr/bin/env node
 
-import { existsSync, lstatSync, mkdirSync, rmSync, symlinkSync } from 'node:fs';
+import {
+  cpSync,
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -15,6 +24,14 @@ const primarySkillSource = join(repoRoot, 'skills', 'web-designer');
 
 const IMG2THREEJS_REPO = 'https://github.com/img2threejs/img2threejs.git';
 const IMG2THREEJS_COMMIT = '441af85a96523569511154b6321859b79f3592f5';
+
+const ENGINEERING_SKILLS = [
+  'frontend-ui-engineering',
+  'browser-testing-with-devtools',
+  'performance-optimization',
+  'source-driven-development',
+  'code-review-and-quality',
+];
 
 const args = process.argv.slice(2);
 const clientIndex = args.indexOf('--client');
@@ -91,9 +108,30 @@ function syncPinnedGitRepo({ repository, commit, destination }) {
   run('git', ['checkout', '--detach', commit], destination);
 }
 
+function preparePortableEngineeringSkill(name, portableRoot) {
+  const source = join(agentSkillsVendorDir, 'skills', name);
+  const destination = join(portableRoot, name);
+  const sharedReferences = join(agentSkillsVendorDir, 'references');
+
+  rmSync(destination, { recursive: true, force: true });
+  mkdirSync(destination, { recursive: true });
+  cpSync(source, destination, { recursive: true });
+  cpSync(sharedReferences, join(destination, 'references'), { recursive: true });
+
+  const skillFile = join(destination, 'SKILL.md');
+  const original = readFileSync(skillFile, 'utf8');
+  const portable = original
+    .replaceAll('../../references/', 'references/')
+    .replaceAll('../references/', 'references/');
+  writeFileSync(skillFile, portable, 'utf8');
+
+  return destination;
+}
+
 for (const required of [
   join(figmaVendorDir, 'package.json'),
-  join(agentSkillsVendorDir, 'skills', 'frontend-ui-engineering', 'SKILL.md'),
+  join(agentSkillsVendorDir, 'references', 'accessibility-checklist.md'),
+  ...ENGINEERING_SKILLS.map((name) => join(agentSkillsVendorDir, 'skills', name, 'SKILL.md')),
   join(diagramVendorDir, 'skills', 'diagram-design', 'SKILL.md'),
 ]) {
   if (!existsSync(required)) {
@@ -108,6 +146,17 @@ run('npm', ['run', 'build'], figmaVendorDir);
 run('npm', ['run', 'install:clients', '--', '--client', client, '--skip-build'], figmaVendorDir);
 
 const home = homedir();
+const portableEngineeringRoot = join(home, '.imon-web-designer', 'engineering');
+mkdirSync(portableEngineeringRoot, { recursive: true });
+
+console.log('\nPreparing portable engineering skills with local shared references...');
+const portableEngineeringSkills = new Map(
+  ENGINEERING_SKILLS.map((name) => [
+    name,
+    preparePortableEngineeringSkill(name, portableEngineeringRoot),
+  ]),
+);
+
 const targets = {
   codex: join(home, '.codex', 'skills'),
   claude: join(home, '.claude', 'skills'),
@@ -116,11 +165,7 @@ const targets = {
 
 const coreSkills = [
   ['imon-web-designer', primarySkillSource],
-  ['frontend-ui-engineering', join(agentSkillsVendorDir, 'skills', 'frontend-ui-engineering')],
-  ['browser-testing-with-devtools', join(agentSkillsVendorDir, 'skills', 'browser-testing-with-devtools')],
-  ['performance-optimization', join(agentSkillsVendorDir, 'skills', 'performance-optimization')],
-  ['source-driven-development', join(agentSkillsVendorDir, 'skills', 'source-driven-development')],
-  ['code-review-and-quality', join(agentSkillsVendorDir, 'skills', 'code-review-and-quality')],
+  ...ENGINEERING_SKILLS.map((name) => [name, portableEngineeringSkills.get(name)]),
   ['diagram-design', join(diagramVendorDir, 'skills', 'diagram-design')],
 ];
 
@@ -147,7 +192,8 @@ for (const targetClient of selected) {
 
 console.log('\nWeb-Designer setup complete.');
 console.log(`Primary skill: ${primarySkillSource}`);
-console.log('Engineering skills: frontend-ui-engineering, browser-testing-with-devtools, performance-optimization, source-driven-development, code-review-and-quality');
+console.log(`Portable engineering skills: ${portableEngineeringRoot}`);
+console.log(`Engineering skills: ${ENGINEERING_SKILLS.join(', ')}`);
 console.log('Visual-content skill: diagram-design');
 if (img2threejsSource) console.log(`Optional 3D skill: ${img2threejsSource}`);
 console.log(`Figma plugin manifest: ${join(home, '.figma-design-pipeline', 'plugin', 'manifest.json')}`);
