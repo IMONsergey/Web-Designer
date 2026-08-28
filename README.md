@@ -1,53 +1,149 @@
 # Web Designer
 
-Agent-native web design workflow that combines **design judgment**, **Figma execution**, **design-to-code**, and **visual QA** in one repository.
+Agent-native web design and design-engineering system for **Codex, Claude Code, and Gemini CLI**.
 
-The project currently integrates two open-source foundations:
+Web-Designer is not one giant prompt. It separates art direction, Figma execution, frontend engineering, specialist visual artifacts, and verification into distinct layers, then routes each task to the narrowest useful skill.
 
-- **Taste Skill** — anti-template visual intelligence and specialist design skills.
-- **SPFR Figma Design Pipeline** — Figma inspection, auditing, planning, token sync, codegen, and high-performance batched writes.
-
-Our own `imon-web-designer` skill sits above both and decides which layer should do what.
-
-> Status: early integration. The upstream projects are pinned so the system remains reproducible while the orchestration layer evolves.
-
-## Why this exists
-
-A design agent needs more than a long prompt.
-
-A useful workflow has separate layers:
+## Stack v2
 
 ```text
-Brief / references / existing product
+Brief / Figma / code / references
               │
               ▼
-      Design Read + Taste
-   visual direction / hierarchy
+       DIRECTION / TASTE
+ Taste Skill + specialist modes
               │
               ▼
-       Figma intelligence
+         FIGMA ENGINE
  inspect / audit / tokens / plan
+ figma_execute / plugin bridge
               │
               ▼
-        Figma execution
-   figma_execute / plugin bridge
+     FRONTEND ENGINEERING
+ architecture / source verification
+ browser tests / performance / review
+              │
+       ┌──────┴──────┐
+       ▼             ▼
+  DIAGRAMS        OPTIONAL 3D
+  editorial       img2threejs
+  HTML/SVG        procedural WebGL
+       └──────┬──────┘
+              ▼
+        IMPLEMENTATION
               │
               ▼
-        Design → Code
- components / tokens / responsive
-              │
-              ▼
-          Visual QA
- Figma ↔ render ↔ reference comparison
+          PROOF / QA
+ browser evidence + visual compare
+ Impeccable deterministic detectors
 ```
 
-The key rule is simple:
+The practical rule:
 
-**Taste decides. Figma Pipeline executes. QA verifies.**
+**Taste directs → Figma executes → engineering makes it real → browser/Impeccable prove it.**
 
-## Primary skill
+## What is integrated
 
-The main entry point is:
+### 1. Taste Skill — visual direction
+
+Original source from [`Leonxlnx/taste-skill`](https://github.com/Leonxlnx/taste-skill), snapshot `ccbc15639c97057cbfcf32ecebc38ef716e4bb37`.
+
+Used for:
+
+- anti-template / anti-AI-slop art direction;
+- greenfield websites;
+- Codex-heavy experimental layouts;
+- redesigns;
+- image/reference → code;
+- premium/minimal/brutalist modes;
+- brand exploration.
+
+The original specialist skills, research, examples, and assets remain in `skills/`, `research/`, and related upstream paths.
+
+### 2. SPFR Figma Design Pipeline — design artifact execution
+
+Vendored at `vendor/figma-design-pipeline/`, pinned to:
+
+```text
+spfr/figma-design-pipeline
+f51a7ee82a34c374d2bc209cb8aac4d5a36044b6
+v0.8.0
+```
+
+Provides:
+
+- tree/node inspection;
+- Figma audits;
+- token/style/component extraction;
+- naming/layout/grouping/component planning;
+- design-to-code mapping/codegen;
+- token export/diff;
+- `figma_execute` for batched mutations;
+- Figma Desktop WebSocket plugin bridge.
+
+Requires **Node.js 24+**.
+
+### 3. Addy Osmani Agent Skills — production engineering
+
+Full pinned upstream snapshot lives at `vendor/agent-skills/`:
+
+```text
+addyosmani/agent-skills
+f63ec56a3cc936408d792956ae583c3c96a825bd
+```
+
+Web-Designer exposes only five focused skills by default:
+
+- `frontend-ui-engineering` — components, responsive UI, semantics, accessibility;
+- `source-driven-development` — verify framework/library decisions against authoritative docs;
+- `browser-testing-with-devtools` — prove runtime behavior in the browser;
+- `performance-optimization` — Core Web Vitals, bundles, media, motion/WebGL performance;
+- `code-review-and-quality` — final engineering quality gate.
+
+The entire catalog is retained for reproducibility and future expansion, but is **not** dumped into every agent context.
+
+### 4. Diagram Design — editorial diagrams and structured visual content
+
+Vendored at `vendor/diagram-design/`, pinned to:
+
+```text
+cathrynlavery/diagram-design
+ac490fd1ac4b4014100f93e729cb4ad198700bd4
+```
+
+It provides branded self-contained HTML/SVG/PNG diagrams and 39 visual grammars: architecture, process, flow, sequence, timeline, Gantt, journey, Sankey, quadrant, charts, schemas, dependency graphs, UML, etc.
+
+Use it when information genuinely communicates better visually than as generic cards or prose. Existing project/Figma tokens should skin the diagram instead of silently using upstream defaults.
+
+### 5. Impeccable — deterministic design QA, enabled per project
+
+Impeccable is intentionally **not vendored**. Web-Designer pins the supported integration to `impeccable@3.6.1` and installs it into the **actual target project**.
+
+Why it is separate:
+
+- 59 deterministic frontend detector rules;
+- design/UX commands such as audit, critique, polish, harden, optimize, adapt, typeset, layout;
+- provider-native hooks;
+- live browser iteration infrastructure;
+- project-local `PRODUCT.md` / `DESIGN.md` context.
+
+It is a QA/iteration layer, not the art director. Approved brand/Figma/user intent outranks generic detector preferences.
+
+### 6. img2threejs — optional reference → procedural Three.js
+
+Not installed by default. `--with-3d` pins:
+
+```text
+img2threejs/img2threejs
+441af85a96523569511154b6321859b79f3592f5
+v1.5.1
+```
+
+Use for a concrete reference object or character that should become a procedural, animation-ready Three.js model with staged quality gates. Do **not** use it for ordinary particles, abstract shaders, globes, or decorative WebGL.
+
+## Primary orchestrator
+
+Main skill:
 
 ```text
 skills/web-designer/SKILL.md
@@ -59,50 +155,24 @@ Install name:
 imon-web-designer
 ```
 
-It routes tasks to the existing specialist skills instead of loading every design rule at once.
+It routes tasks instead of concatenating all skills into one context.
 
 Examples:
 
-- Greenfield site → `taste-skill`
-- Stronger Codex / experimental art direction → `gpt-tasteskill`
-- Existing site → `redesign-skill`
-- Screenshot/reference → `image-to-code-skill`
-- Figma as source or destination → `imon-web-designer` + Figma Design Pipeline
+| Task | Route |
+|---|---|
+| New landing / portfolio / brand site | Taste + frontend engineering |
+| Existing-site redesign | Redesign skill → implementation → browser/QA |
+| Figma → code | Figma Pipeline → engineering → visual comparison |
+| Screenshot/reference → site | Image-to-code → engineering → QA |
+| Process/architecture/roadmap visual | Diagram Design |
+| Heavy animation / WebGL | performance gate + appropriate implementation skill |
+| Reference product/object → 3D | optional img2threejs |
+| Final UI cleanup | browser evidence + Impeccable audit/critique/polish |
 
-See [`skills/web-designer/SKILL.md`](skills/web-designer/SKILL.md) for the full routing and QA protocol.
+See [`skills/web-designer/SKILL.md`](skills/web-designer/SKILL.md) for the routing contract.
 
-## Figma layer
-
-The upstream pipeline is vendored at:
-
-```text
-vendor/figma-design-pipeline/
-```
-
-Pinned upstream:
-
-```text
-spfr/figma-design-pipeline
-f51a7ee82a34c374d2bc209cb8aac4d5a36044b6
-v0.8.0
-```
-
-It provides:
-
-- Figma tree inspection and search
-- audits
-- token/style/component extraction
-- naming/layout/grouping/component planning
-- component mapping and code generation
-- token export/diff
-- `figma_execute` for batched writes
-- Figma Desktop plugin bridge
-
-The vendored package currently requires **Node.js 24+**.
-
-Do not put project-specific modifications inside `vendor/figma-design-pipeline/`. Integration logic belongs in the root repository so upstream can be updated cleanly.
-
-## Quick setup
+## Install
 
 ### 1. Clone
 
@@ -111,26 +181,22 @@ git clone https://github.com/IMONsergey/Web-Designer.git
 cd Web-Designer
 ```
 
-### 2. Use Node 24+
-
-```bash
-node --version
-```
-
-If necessary:
+### 2. Node 24+
 
 ```bash
 nvm install 24
 nvm use 24
 ```
 
-### 3. Install for all supported agent CLIs
+### 3. Install core stack
+
+All supported agent CLIs:
 
 ```bash
 npm run setup
 ```
 
-Or only one client:
+Or one client:
 
 ```bash
 npm run setup:codex
@@ -138,64 +204,139 @@ npm run setup:claude
 npm run setup:gemini
 ```
 
-The setup script:
-
-1. installs dependencies for the vendored Figma pipeline;
-2. builds its MCP server and Figma plugin;
-3. registers the pipeline with the selected CLI(s);
-4. installs/symlinks the upstream pipeline skill;
-5. symlinks `imon-web-designer` into the selected CLI skill directory.
-
-### 4. Enable the fast Figma write bridge
-
-After setup, open **Figma Desktop**:
+Core setup installs/builds the Figma pipeline and links:
 
 ```text
-Plugins → Development → Import plugin from manifest
+imon-web-designer
+frontend-ui-engineering
+source-driven-development
+browser-testing-with-devtools
+performance-optimization
+code-review-and-quality
+diagram-design
 ```
 
-Choose:
+### Optional 3D stack
+
+```bash
+npm run setup:3d
+```
+
+This additionally creates a pinned checkout under:
 
 ```text
-~/.figma-design-pipeline/plugin/manifest.json
+~/.imon-web-designer/extras/img2threejs
 ```
 
-Run the plugin. Then restart the coding-agent CLI.
+and links `img2threejs` into the selected skill directories.
 
-At the start of a Figma write task the agent should call:
+## Figma Desktop bridge
+
+After setup:
+
+```text
+Figma Desktop
+→ Plugins
+→ Development
+→ Import plugin from manifest
+→ ~/.figma-design-pipeline/plugin/manifest.json
+```
+
+Run the plugin, then restart the agent CLI.
+
+Before any Figma write task the agent should call:
 
 ```text
 figma_plugin_status
 ```
 
-When connected, Figma mutations go through `figma_execute` and the plugin bridge. If disconnected, `figma_execute` remains the first write path and can provide fallback JavaScript.
+All mutations should route through:
 
-## Example workflows
+```text
+figma_execute
+```
+
+If the bridge is disconnected, `figma_execute` remains the first path and can provide fallback JavaScript.
+
+## Enable deterministic QA in a target project
+
+Example for Codex:
+
+```bash
+npm run enable:project -- --project ../my-site --client codex
+```
+
+For all supported clients:
+
+```bash
+npm run enable:project -- --project ../my-site --client all
+```
+
+This runs the pinned Impeccable project installer. Inside the target project, initialize its design context once using the provider's Impeccable invocation (`/impeccable init` where supported).
+
+For Codex, approve the project hook when Codex requests hook trust.
+
+## Recommended workflow
+
+### Greenfield website
+
+```text
+brief/references
+→ Design Read
+→ Taste direction
+→ implementation plan
+→ frontend-ui-engineering
+→ build
+→ browser-testing-with-devtools
+→ performance-optimization when material
+→ Impeccable audit/critique
+→ targeted fixes
+→ polish/harden
+→ final screenshot/reference comparison
+```
 
 ### Figma → production frontend
 
 ```text
-Inspect the selected Figma page, audit hierarchy/components/tokens,
-load the Web Designer skill, map the design to the existing codebase,
-implement it responsively, then visually compare the rendered result
-against Figma before finishing.
+figma_plugin_status
+→ inspect tree/components/tokens
+→ audit
+→ preserve/define design direction
+→ plan mutations if needed
+→ figma_execute
+→ screenshot + re-inspect
+→ map components/tokens to existing code
+→ implement responsively
+→ browser evidence
+→ compare render against Figma
+→ Impeccable QA
 ```
 
-### Existing site → Figma redesign → code
+### Branded diagram
 
 ```text
-Audit the existing site first. Preserve valid brand/content constraints.
-Create a design direction using the redesign/taste skills, apply the
-approved changes in Figma through the pipeline, then implement the same
-token/component system in code and run visual QA.
+content/system to explain
+→ decide whether a diagram is actually better than prose/table
+→ Figma/project tokens
+→ diagram-design semantic roles/profile
+→ choose visual grammar
+→ generate HTML/SVG
+→ verify hierarchy/contrast/content
+→ embed/export
 ```
 
-### Reference image → Figma → code
+### Reference object → WebGL hero
 
 ```text
-Use image-to-code analysis to extract composition, hierarchy, type,
-spacing, imagery and interaction intent. Reconstruct the system in Figma,
-verify visually, then implement it in code without flattening the design.
+npm run setup:3d
+→ img2threejs intake
+→ quality contract/spec
+→ pass-by-pass procedural model
+→ turntable/screenshots
+→ corrections
+→ integrate into site
+→ browser/performance gate
+→ fallback/reduced-motion strategy
 ```
 
 ## Repository structure
@@ -203,47 +344,54 @@ verify visually, then implement it in code without flattening the design.
 ```text
 AGENTS.md
 skills/
-  web-designer/          # primary orchestration skill
-  taste-skill/           # general anti-slop design intelligence
-  gpt-tasteskill/        # stricter GPT/Codex direction
+  web-designer/             # primary I’MON orchestrator
+  taste-skill/              # Taste default
+  gpt-tasteskill/
   redesign-skill/
   image-to-code-skill/
-  ...                    # specialist design modes
+  ...                       # focused Taste-derived modes
 scripts/
-  install-web-designer.mjs
+  install-web-designer.mjs  # core installer + optional --with-3d
+  enable-project.mjs        # per-project Impeccable QA/hooks
   validate-web-designer.mjs
 vendor/
-  figma-design-pipeline/ # pinned upstream MCP server + Figma plugin
+  figma-design-pipeline/    # pinned Figma MCP/plugin
+  agent-skills/             # pinned Addy engineering pack
+  diagram-design/           # pinned editorial diagram pack
 THIRD_PARTY_NOTICES.md
 ```
 
-The original Taste Skill research, examples, assets, scripts, and specialist skills remain in the repository.
+Pinned vendor directories should remain upstream-clean. I’MON-specific routing and wrappers belong outside `vendor/`.
 
 ## Validation
 
-Integration checks:
+Root integration checks:
 
 ```bash
 npm run validate
 ```
 
-Full vendored pipeline check/build:
+Figma vendor validation:
 
 ```bash
-cd vendor/figma-design-pipeline
-npm ci
-npm run check
-npm test
-npm run build
+npm run validate:vendor
 ```
 
-GitHub Actions runs both validation layers on pushes and pull requests.
+GitHub Actions also syntax-checks integration scripts, validates selected vendor skill paths, and runs the Figma pipeline typecheck/tests/build.
+
+## What is deliberately not bundled
+
+A bigger skill folder is not automatically a better agent.
+
+We currently **do not bundle**:
+
+- `ui-ux-pro-max-skill` — too much overlap with Taste + Impeccable;
+- `Graphify` — excellent codebase intelligence, but belongs beside the agent as project-understanding infrastructure rather than inside the design core;
+- `Archify` — strong technical architecture artifact system, but overlaps the codebase/architecture intelligence layer more than the everyday design workflow;
+- the entire `MengTo/Skills` catalog — highly relevant, but 123 skills would create routing noise. Specific workflows can be cherry-picked later.
+
+Likely future MengTo candidates: full-page capture, video-to-superprompt, HTML-to-interaction-prompts, web-animation optimization, and a small number of proven GSAP/Three.js/Awwwards workflows.
 
 ## Upstream and licenses
 
-This repository contains third-party MIT-licensed source. Attribution and pinned revisions are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
-
-- Taste Skill: https://github.com/Leonxlnx/taste-skill
-- Figma Design Pipeline: https://github.com/spfr/figma-design-pipeline
-
-Preserve the relevant upstream license notices when redistributing their code or substantial portions of it.
+See [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for exact pinned revisions, license locations, and external integrations.
