@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - feat/unified-web-designer
+      - feat/design-stack-v2
   pull_request:
 
 permissions:
@@ -21,6 +21,7 @@ jobs:
       - name: Syntax-check integration scripts
         run: |
           node --check scripts/install-web-designer.mjs
+          node --check scripts/enable-project.mjs
           node --check scripts/validate-web-designer.mjs
       - name: Validate repository integration
         run: npm run validate
@@ -45,3 +46,20 @@ jobs:
         run: npm test
       - name: Build server and plugin
         run: npm run build
+
+  vendor-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify selected engineering and diagram skills exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f vendor/agent-skills/skills/frontend-ui-engineering/SKILL.md
+          test -f vendor/agent-skills/skills/browser-testing-with-devtools/SKILL.md
+          test -f vendor/agent-skills/skills/performance-optimization/SKILL.md
+          test -f vendor/agent-skills/skills/source-driven-development/SKILL.md
+          test -f vendor/agent-skills/skills/code-review-and-quality/SKILL.md
+          test -f vendor/diagram-design/skills/diagram-design/SKILL.md
+          test -f vendor/agent-skills/LICENSE
+          test -f vendor/diagram-design/LICENSE
