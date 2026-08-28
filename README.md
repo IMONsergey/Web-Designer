@@ -1,258 +1,249 @@
-<p align="center">
-  <img src="assets/readme-banner.webp" alt="Taste Skill - Anti-slop Agent Skills for premium frontends" width="100%" />
-</p>
+# Web Designer
 
-<h1 align="center">Taste Skill</h1>
+Agent-native web design workflow that combines **design judgment**, **Figma execution**, **design-to-code**, and **visual QA** in one repository.
 
-<p align="center">
-  <em>The Anti-Slop Frontend Framework for AI Agents</em>
-</p>
+The project currently integrates two open-source foundations:
 
-<p align="center" style="margin-bottom: 8px;">
-  <a href="https://tasteskill.dev" title="Visit tasteskill.dev"><img src="assets/readme-buttons/btn-site.webp" alt="Visit tasteskill.dev" height="56" /></a>
-</p>
+- **Taste Skill** — anti-template visual intelligence and specialist design skills.
+- **SPFR Figma Design Pipeline** — Figma inspection, auditing, planning, token sync, codegen, and high-performance batched writes.
 
-<p align="center">
-  <a href="https://platform.kimi.ai?track_id=track-20f0d64bcaba419bb425a3e8c306f65d&aff=taste-skill">
-    <img src="https://gcdn.moonshot.cn/growth-cdn/sponsor/kimi-en.png" alt="Kimi K3" width="100%" />
-  </a>
-</p>
+Our own `imon-web-designer` skill sits above both and decides which layer should do what.
 
-<p>Thanks to <strong>Kimi (Moonshot AI)</strong>, our Open Source Friend, for supporting taste-skill! With 2.8T parameters, native vision, and a 1-million-token context window, <strong>Kimi K3</strong> delivers frontier performance across long-horizon coding, knowledge work, and reasoning.</p>
+> Status: early integration. The upstream projects are pinned so the system remains reproducible while the orchestration layer evolves.
 
-<p><a href="https://platform.kimi.ai?track_id=track-20f0d64bcaba419bb425a3e8c306f65d&aff=taste-skill"><strong>Get a Kimi API key</strong></a>. Taste-skill users get <strong>10% bonus API credits</strong> on their first purchase.</p>
+## Why this exists
 
-<h3 align="center">Sponsors</h3>
+A design agent needs more than a long prompt.
 
-<table align="center">
-  <tr>
-    <td align="center" width="104">
-      <a href="https://interfaces.dev/?utm_source=tasteskill&utm_medium=sponsorship">
-        <img src="assets/sponsors/interfaces-dev-icon.webp" alt="Interfaces" width="52" height="52" />
-      </a>
-    </td>
-    <td><sub><a href="https://interfaces.dev/?utm_source=tasteskill&utm_medium=sponsorship"><strong>interfaces.dev</strong></a> · A design engineering magazine by <a href="https://github.com/jakubkrehel"><strong>Jakub Krehel</strong></a></sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="104">
-      <a href="https://reactbits.dev">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="assets/sponsors/reactbits-icon-dark.svg" />
-          <img src="assets/sponsors/reactbits-icon-light.svg" alt="React Bits" width="52" height="52" />
-        </picture>
-      </a>
-    </td>
-    <td><sub><a href="https://reactbits.dev"><strong>React Bits</strong></a> · animated React components for creative interfaces</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="104"><a href="https://animations.dev"><img src="assets/sponsors/animations-dev.webp" alt="animations.dev" width="52" height="52" /></a></td>
-    <td><sub><a href="https://github.com/emilkowalski"><strong>Emil Kowalski</strong></a> · <a href="https://animations.dev">animations.dev</a></sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="104"><a href="https://img.ly/"><img src="assets/sponsors/imgly-logo.svg" alt="IMG.LY" width="52" height="52" /></a></td>
-    <td><sub><a href="https://img.ly/"><strong>IMG.LY</strong></a> · CreativeEditor SDK</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="104"><a href="https://www.sent.dm"><img src="assets/sponsors/sentdm.png" alt="Sent.dm" width="52" height="52" /></a></td>
-    <td><sub><a href="https://www.sent.dm"><strong>Sent.dm</strong></a> · messaging APIs for SMS, WhatsApp, and RCS</sub></td>
-  </tr>
-  <tr>
-    <td align="center" width="104"><a href="https://www.kimi.com"><img src="assets/sponsors/kimi-icon.png" alt="Kimi" width="52" height="52" /></a></td>
-    <td>
-      <a href="https://www.kimi.com">
-        <picture>
-          <source media="(prefers-color-scheme: dark)" srcset="https://kimi-file.moonshot.cn/prod-chat-kimi/kfs/4/1/2026-06-05/1d8h69mt3v89kkekg24gg" />
-          <img alt="Kimi Open Source Friends" src="https://kimi-file.moonshot.cn/prod-chat-kimi/kfs/4/1/2026-06-05/1d8h69fudcmosb3pipls0" height="42" />
-        </picture>
-      </a>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="104"><a href="https://vercel.com/open-source-program"><img src="assets/sponsors/vercel-logo.svg" alt="Vercel" width="52" height="52" /></a></td>
-    <td><a href="https://vercel.com/open-source-program"><img src="assets/vercel-oss-program-badge.svg" alt="Vercel Open Source Program" height="28" /></a></td>
-  </tr>
-</table>
+A useful workflow has separate layers:
 
-<p align="center"><sub><a href="https://github.com/sponsors/Leonxlnx">Become a sponsor</a></sub></p>
-
-Portable **Agent Skills** that upgrade AI-built interfaces: stronger layout, typography, motion, and spacing instead of boilerplate-looking UIs. This repo also includes **image-generation skills** for reference boards (web, mobile, brand kits). Pair them with **ChatGPT Images** or similar generators, then hand the frames to Codex, Cursor, or Claude Code for implementation.
-
-<p align="center">
-  <a href="LICENSE"><img src="assets/readme-buttons/btn-mit.webp" alt="MIT License" height="45" valign="middle" /></a>
-  &nbsp;
-  <a href="https://github.com/vercel-labs/agent-skills"><img src="assets/readme-buttons/btn-agent-skills.webp" alt="Agent Skills compatible" height="45" valign="middle" /></a>
-  &nbsp;
-  <a href="#installing"><img src="assets/readme-buttons/btn-tools.webp" alt="Codex, Cursor, Claude" height="45" valign="middle" /></a>
-  &nbsp;
-  <a href="https://www.tasteskill.dev/changelog"><img src="assets/readme-buttons/btn-changelog.webp" alt="Changelog" height="45" valign="middle" /></a>
-</p>
-
-## Disclaimer
-
-Taste Skill has no official token, coin, or crypto project. Any token using my name, image, or project is unaffiliated and not endorsed by me.
-
-<p align="center"><sub><a href="#disclaimer">Disclaimer</a> · <a href="#installing">Install</a> · <a href="#skills">Skills</a> · <a href="#settings-taste-skill-only">Settings</a> · <a href="#examples">Examples</a> · <a href="#sponsors">Sponsors</a> · <a href="#research">Research</a> · <a href="#common-questions">FAQ</a> · <a href="#license">License</a></sub></p>
-
-## Feedback & Contributions
-
-We would love your feedback. Suggestions and bug reports:
-
-- Open a Pull Request or Issue on GitHub  
-- DM [@lexnlin](https://x.com/lexnlin) or [@blueemi99](https://x.com/blueemi99)  
-- Email us at [hello@tasteskill.dev](mailto:hello@tasteskill.dev)
-
-## Installing
-
-The [`npx skills add`](https://github.com/vercel-labs/agent-skills) CLI scans the `skills/` folder in this repo, so **all skills below (code and image-generation) install the same way.**
-
-```bash
-npx skills add https://github.com/Leonxlnx/taste-skill
+```text
+Brief / references / existing product
+              │
+              ▼
+      Design Read + Taste
+   visual direction / hierarchy
+              │
+              ▼
+       Figma intelligence
+ inspect / audit / tokens / plan
+              │
+              ▼
+        Figma execution
+   figma_execute / plugin bridge
+              │
+              ▼
+        Design → Code
+ components / tokens / responsive
+              │
+              ▼
+          Visual QA
+ Figma ↔ render ↔ reference comparison
 ```
 
-Install a single skill by its **install name** (the `name:` field inside the SKILL frontmatter, not the folder name):
+The key rule is simple:
 
-```bash
-npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"
+**Taste decides. Figma Pipeline executes. QA verifies.**
+
+## Primary skill
+
+The main entry point is:
+
+```text
+skills/web-designer/SKILL.md
 ```
 
-You can also copy any `SKILL.md` into your project or paste it into ChatGPT / Codex conversations.
+Install name:
 
-### Updating from the previous version
-
-The default `taste-skill` (install name `design-taste-frontend`) is now **v2 (experimental)**, a substantial rewrite of the original v1. If you already have v1 installed, just re-run the install command and you will be upgraded:
-
-```bash
-npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend"
+```text
+imon-web-designer
 ```
 
-The install name did not change, so no script updates are needed. The newer SKILL.md replaces the older one in place.
+It routes tasks to the existing specialist skills instead of loading every design rule at once.
 
-If you depend on the exact behavior of v1 and want to pin to it explicitly:
+Examples:
 
-```bash
-npx skills add https://github.com/Leonxlnx/taste-skill --skill "design-taste-frontend-v1"
+- Greenfield site → `taste-skill`
+- Stronger Codex / experimental art direction → `gpt-tasteskill`
+- Existing site → `redesign-skill`
+- Screenshot/reference → `image-to-code-skill`
+- Figma as source or destination → `imon-web-designer` + Figma Design Pipeline
+
+See [`skills/web-designer/SKILL.md`](skills/web-designer/SKILL.md) for the full routing and QA protocol.
+
+## Figma layer
+
+The upstream pipeline is vendored at:
+
+```text
+vendor/figma-design-pipeline/
 ```
 
-See [CHANGELOG.md](CHANGELOG.md) for the full v1 to v2 diff and the rationale.
+Pinned upstream:
 
-## Skills
+```text
+spfr/figma-design-pipeline
+f51a7ee82a34c374d2bc209cb8aac4d5a36044b6
+v0.8.0
+```
 
-Each skill does one job; you do not need all of them at once. **Implementation skills** output code. **Image-generation skills** output reference images only.
+It provides:
 
-The `Install name` column is the exact value you pass to `--skill`.
+- Figma tree inspection and search
+- audits
+- token/style/component extraction
+- naming/layout/grouping/component planning
+- component mapping and code generation
+- token export/diff
+- `figma_execute` for batched writes
+- Figma Desktop plugin bridge
 
-| Skill (folder) | Install name | Description |
-| --- | --- | --- |
-| **taste-skill** | `design-taste-frontend` | 🆕 **v2 (experimental)** - substantial rewrite of the default skill. Reads the brief, infers the design language, tunes three dials (VARIANCE / MOTION / DENSITY). Brief inference, design-system map, hard em-dash ban, canonical GSAP code skeletons, redesign-audit protocol, strict pre-flight check. Actively iterating toward v2.0.0 stable. |
-| **taste-skill-v1** | `design-taste-frontend-v1` | The original v1 of taste-skill, preserved for projects depending on its exact behavior. Use only if the v2 default breaks something specific in your workflow. |
-| **gpt-tasteskill** | `gpt-taste` | Stricter variant for GPT/Codex: higher layout variance, stronger GSAP direction, aggressive anti-slop. |
-| **image-to-code-skill** | `image-to-code` | Image-first pipeline: generate site references, analyze them, then implement the frontend to match. |
-| **redesign-skill** | `redesign-existing-projects` | Existing projects: audit the UI first, then fix layout, spacing, hierarchy, styling. |
-| **soft-skill** | `high-end-visual-design` | Polished, calm, expensive UI with softer contrast, whitespace, premium fonts, spring motion. |
-| **output-skill** | `full-output-enforcement` | When the model ships half-finished work: full output, no placeholder comments. |
-| **minimalist-skill** | `minimalist-ui` | Editorial product UI (Notion/Linear vibes), restrained palette, crisp structure. |
-| **brutalist-skill** | `industrial-brutalist-ui` | Hard mechanical language: Swiss type, sharp contrast, experimental layout. |
-| **stitch-skill** | `stitch-design-taste` | Google Stitch-compatible rules, including optional `DESIGN.md` export format. |
+The vendored package currently requires **Node.js 24+**.
 
-### Image generation skills
+Do not put project-specific modifications inside `vendor/figma-design-pipeline/`. Integration logic belongs in the root repository so upstream can be updated cleanly.
 
-These produce design images only (no code). Use with ChatGPT Images, Codex image mode, or any agent that generates images.
+## Quick setup
 
-| Skill (folder) | Install name | Description |
-| --- | --- | --- |
-| **imagegen-frontend-web** | `imagegen-frontend-web` | Website comps: hero, landing, multi-section with strong typography, spacing, anti-slop art direction. |
-| **imagegen-frontend-mobile** | `imagegen-frontend-mobile` | Mobile screens and flows: iOS/Android/cross-platform, mockups, readable type, coherent sets. |
-| **brandkit** | `brandkit` | Brand-kit boards: logo directions, palettes, type, identity applications across categories. |
+### 1. Clone
 
-### Which one should I use?
+```bash
+git clone https://github.com/IMONsergey/Web-Designer.git
+cd Web-Designer
+```
 
-- Start with **taste-skill** for the safest general default. (Now v2 experimental - see what changed in the [CHANGELOG](CHANGELOG.md).)
-- If you depend on the exact behavior of the original taste-skill, install **taste-skill-v1** instead. 
-- Use **gpt-taste** when you want the stricter GPT/Codex-oriented rules and motion/layout enforcement. 
-- Use **image-to-code-skill** for image → analyze → code website workflows. 
-- Use **redesign-skill** to improve an existing codebase instead of greenfield styling. 
-- Add **soft-skill**, **minimalist-skill**, or **brutalist-skill** when the visual direction is already chosen. 
-- Add **output-skill** if the agent keeps truncating output. 
-- Use **imagegen-frontend-web**, **imagegen-frontend-mobile**, or **brandkit** when the deliverable is **images** (comps, flows, identity boards), then pass results to your coding agent.
+### 2. Use Node 24+
 
-### Image-first tip
+```bash
+node --version
+```
 
-For **image-to-code-skill**, state the pipeline in the prompt, e.g.: `follow the skill: generate images, then analyze, then code`.
+If necessary:
 
-### ChatGPT Images and Codex
+```bash
+nvm install 24
+nvm use 24
+```
 
-Attach or paste **`imagegen-frontend-web`**, **`imagegen-frontend-mobile`**, or **`brandkit`** and ask for the frames you need, then feed the renders to Codex, Cursor, or Claude Code. Use **image-to-code-skill** when you want one workflow that both generates references and implements the site in code.
+### 3. Install for all supported agent CLIs
 
-## Settings (taste-skill only)
+```bash
+npm run setup
+```
 
-Numbers at the top of the file are 1-10 dials:
+Or only one client:
 
-- **DESIGN_VARIANCE**: Layout experimentation (lower: centered/clean · higher: asymmetric/modern).
-- **MOTION_INTENSITY**: Animation depth (lower: hover · higher: scroll/magnetic).
-- **VISUAL_DENSITY**: Information per viewport (lower: spacious · higher: dense dashboards).
+```bash
+npm run setup:codex
+npm run setup:claude
+npm run setup:gemini
+```
 
-## Examples
+The setup script:
 
-Created with taste-skill:
+1. installs dependencies for the vendored Figma pipeline;
+2. builds its MCP server and Figma plugin;
+3. registers the pipeline with the selected CLI(s);
+4. installs/symlinks the upstream pipeline skill;
+5. symlinks `imon-web-designer` into the selected CLI skill directory.
 
-<p>
-  <img src="examples/floria-top.webp" width="400" />
-  <img src="examples/floria-bottom.webp" width="400" />
-</p>
+### 4. Enable the fast Figma write bridge
 
-## Support the project
+After setup, open **Figma Desktop**:
 
-If Taste Skill helps you, consider sponsoring:
+```text
+Plugins → Development → Import plugin from manifest
+```
 
-[Sponsor on GitHub](https://github.com/sponsors/Leonxlnx)
+Choose:
 
-### Community Sponsors
+```text
+~/.figma-design-pipeline/plugin/manifest.json
+```
 
-<a href="https://github.com/dnakov"><img src="https://github.com/dnakov.png" width="40" height="40" style="border-radius:50%" alt="dnakov" title="dnakov" /></a>
-<a href="https://github.com/AkramReshad"><img src="https://github.com/AkramReshad.png" width="40" height="40" style="border-radius:50%" alt="AkramReshad" title="AkramReshad" /></a>
-<a href="https://github.com/ajmalaksar25"><img src="https://github.com/ajmalaksar25.png" width="40" height="40" style="border-radius:50%" alt="ajmalaksar25" title="ajmalaksar25" /></a>
-<a href="https://github.com/krikkkk"><img src="https://github.com/krikkkk.png" width="40" height="40" style="border-radius:50%" alt="krikkkk" title="krikkkk" /></a>
-<a href="https://github.com/navanchauhan"><img src="https://github.com/navanchauhan.png" width="40" height="40" style="border-radius:50%" alt="navanchauhan" title="navanchauhan" /></a>
-<a href="https://github.com/robinebers"><img src="https://github.com/robinebers.png" width="40" height="40" style="border-radius:50%" alt="robinebers" title="robinebers" /></a>
-<a href="https://github.com/JKc66"><img src="https://github.com/JKc66.png" width="40" height="40" style="border-radius:50%" alt="JKc66" title="JKc66" /></a>
-<a href="https://github.com/u2393696078-rgb"><img src="https://github.com/u2393696078-rgb.png" width="40" height="40" style="border-radius:50%" alt="u2393696078-rgb" title="u2393696078-rgb" /></a>
-<a href="https://github.com/a-human-created-this"><img src="https://github.com/a-human-created-this.png" width="40" height="40" style="border-radius:50%" alt="a-human-created-this" title="a-human-created-this" /></a>
-<a href="https://github.com/AtharvaJaiswal005"><img src="https://github.com/AtharvaJaiswal005.png" width="40" height="40" style="border-radius:50%" alt="AtharvaJaiswal005" title="AtharvaJaiswal005" /></a>
-<a href="https://github.com/ghughes7"><img src="https://github.com/ghughes7.png" width="40" height="40" style="border-radius:50%" alt="ghughes7" title="ghughes7" /></a>
-<a href="https://github.com/mccun934"><img src="https://github.com/mccun934.png" width="40" height="40" style="border-radius:50%" alt="mccun934" title="mccun934" /></a>
-<a href="https://github.com/techmedic5"><img src="https://github.com/techmedic5.png" width="40" height="40" style="border-radius:50%" alt="techmedic5" title="techmedic5" /></a>
-<a href="https://github.com/bytewerk-dev"><img src="https://github.com/bytewerk-dev.png" width="40" height="40" style="border-radius:50%" alt="bytewerk-dev" title="bytewerk-dev" /></a>
-<a href="https://github.com/LuisGot"><img src="https://github.com/LuisGot.png" width="40" height="40" style="border-radius:50%" alt="LuisGot" title="LuisGot" /></a>
-<a href="https://github.com/oskar-collab"><img src="https://github.com/oskar-collab.png" width="40" height="40" style="border-radius:50%" alt="oskar-collab" title="oskar-collab" /></a>
+Run the plugin. Then restart the coding-agent CLI.
 
-<p align="center">
- <a href="https://www.star-history.com/leonxlnx/taste-skill">
-  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/badge?repo=Leonxlnx/taste-skill&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/badge?repo=Leonxlnx/taste-skill" />
-   <img alt="Star History Rank" src="https://api.star-history.com/badge?repo=Leonxlnx/taste-skill" />
-  </picture>
- </a>
-</p>
+At the start of a Figma write task the agent should call:
 
-## Research
+```text
+figma_plugin_status
+```
 
-Background writing that shaped these skills lives in [`research/`](research/).
+When connected, Figma mutations go through `figma_execute` and the plugin bridge. If disconnected, `figma_execute` remains the first write path and can provide fallback JavaScript.
 
-## Common Questions
+## Example workflows
 
-**How is this different from other AI design skills?**  
-Multiple specialized variants, adjustable dials in key skills, anti-repetition rules informed by dedicated research. All are framework agnostic across major coding agents.
+### Figma → production frontend
 
-**Does it work with React, Vue, Svelte?**  
-Yes. Rules target design intent, not a single framework API.
+```text
+Inspect the selected Figma page, audit hierarchy/components/tokens,
+load the Web Designer skill, map the design to the existing codebase,
+implement it responsively, then visually compare the rendered result
+against Figma before finishing.
+```
 
-**What is SKILL.md?**  
-A portable instruction file agents can load automatically; install via `npx skills add` or by copying into a repo or conversation.
+### Existing site → Figma redesign → code
 
-**Do image-generation skills install with `npx skills add`?**  
-Yes. They live under `skills/` alongside the code skills so the same CLI discovers them.
+```text
+Audit the existing site first. Preserve valid brand/content constraints.
+Create a design direction using the redesign/taste skills, apply the
+approved changes in Figma through the pipeline, then implement the same
+token/component system in code and run visual QA.
+```
 
-## License
+### Reference image → Figma → code
 
-[MIT License](LICENSE) · Copyright (c) 2026 Leonxlnx
+```text
+Use image-to-code analysis to extract composition, hierarchy, type,
+spacing, imagery and interaction intent. Reconstruct the system in Figma,
+verify visually, then implement it in code without flattening the design.
+```
+
+## Repository structure
+
+```text
+AGENTS.md
+skills/
+  web-designer/          # primary orchestration skill
+  taste-skill/           # general anti-slop design intelligence
+  gpt-tasteskill/        # stricter GPT/Codex direction
+  redesign-skill/
+  image-to-code-skill/
+  ...                    # specialist design modes
+scripts/
+  install-web-designer.mjs
+  validate-web-designer.mjs
+vendor/
+  figma-design-pipeline/ # pinned upstream MCP server + Figma plugin
+THIRD_PARTY_NOTICES.md
+```
+
+The original Taste Skill research, examples, assets, scripts, and specialist skills remain in the repository.
+
+## Validation
+
+Integration checks:
+
+```bash
+npm run validate
+```
+
+Full vendored pipeline check/build:
+
+```bash
+cd vendor/figma-design-pipeline
+npm ci
+npm run check
+npm test
+npm run build
+```
+
+GitHub Actions runs both validation layers on pushes and pull requests.
+
+## Upstream and licenses
+
+This repository contains third-party MIT-licensed source. Attribution and pinned revisions are recorded in [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md).
+
+- Taste Skill: https://github.com/Leonxlnx/taste-skill
+- Figma Design Pipeline: https://github.com/spfr/figma-design-pipeline
+
+Preserve the relevant upstream license notices when redistributing their code or substantial portions of it.
