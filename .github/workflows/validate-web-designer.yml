@@ -1,0 +1,43 @@
+name: Validate Web-Designer
+
+on:
+  push:
+    branches:
+      - main
+      - feat/unified-web-designer
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Validate repository integration
+        run: npm run validate
+
+  figma-pipeline:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: vendor/figma-design-pipeline
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: vendor/figma-design-pipeline/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run check
+      - name: Test
+        run: npm test
+      - name: Build server and plugin
+        run: npm run build
