@@ -1,0 +1,18 @@
+{
+  "name": "imon-web-designer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Unified agent-native web design workflow: Taste Skill + Figma Design Pipeline + orchestration and QA.",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "setup": "node scripts/install-web-designer.mjs --client all",
+    "setup:codex": "node scripts/install-web-designer.mjs --client codex",
+    "setup:claude": "node scripts/install-web-designer.mjs --client claude",
+    "setup:gemini": "node scripts/install-web-designer.mjs --client gemini",
+    "validate": "node scripts/validate-web-designer.mjs",
+    "validate:vendor": "npm --prefix vendor/figma-design-pipeline run check && npm --prefix vendor/figma-design-pipeline test && npm --prefix vendor/figma-design-pipeline run build"
+  }
+}
